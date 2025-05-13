@@ -1,0 +1,195 @@
+---
+openapi: 3.1.0
+components:
+  schemas:
+    LocalDate:
+      type: string
+      format: date
+      examples:
+      - 2022-03-10
+    UUID:
+      type: string
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+    VehicleCreateOrUpdateDTO:
+      type: object
+      required:
+      - model
+      - purchaseDate
+      - purchaseValue
+      properties:
+        licensePlate:
+          type: string
+        model:
+          type: string
+          pattern: \S
+        manufacturer:
+          type: string
+        chassis:
+          type: string
+        year:
+          type: integer
+          format: int32
+        purchaseDate:
+          $ref: "#/components/schemas/LocalDate"
+        purchaseValue:
+          type: number
+          exclusiveMinimum: 0.0
+        saleDate:
+          $ref: "#/components/schemas/LocalDate"
+        saleValue:
+          type: number
+          exclusiveMinimum: 0.0
+        maintenanceCost:
+          type: number
+          exclusiveMinimum: 0.0
+        lastMaintenance:
+          $ref: "#/components/schemas/LocalDate"
+        color:
+          type: string
+        engine:
+          type: string
+        fuelType:
+          type: string
+        status:
+          type: string
+    VehicleDTO:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        licensePlate:
+          type: string
+        chassis:
+          type: string
+        model:
+          type: string
+        manufacturer:
+          type: string
+        year:
+          type: integer
+          format: int32
+        purchaseDate:
+          $ref: "#/components/schemas/LocalDate"
+        purchaseValue:
+          type: number
+        saleDate:
+          $ref: "#/components/schemas/LocalDate"
+        saleValue:
+          type: number
+        maintenanceCost:
+          type: number
+        lastMaintenance:
+          $ref: "#/components/schemas/LocalDate"
+        color:
+          type: string
+        engine:
+          type: string
+        fuelType:
+          type: string
+        status:
+          type: string
+paths:
+  /api/v1/vehicles:
+    get:
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: size
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VehicleDTO"
+      summary: Get All
+      tags:
+      - Vehicle Resource
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleCreateOrUpdateDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VehicleDTO"
+        "400":
+          description: Bad Request
+      summary: Create
+      tags:
+      - Vehicle Resource
+  /api/v1/vehicles/{id}:
+    put:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleCreateOrUpdateDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VehicleDTO"
+        "400":
+          description: Bad Request
+      summary: Update
+      tags:
+      - Vehicle Resource
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VehicleDTO"
+      summary: Get By Id
+      tags:
+      - Vehicle Resource
+    delete:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      responses:
+        "204":
+          description: No Content
+      summary: Delete
+      tags:
+      - Vehicle Resource
+info:
+  title: bookkeeping-service API
+  version: 1.0.0-SNAPSHOT
