@@ -2,6 +2,7 @@ package com.bookkeeping.interfaces.rest;
 
 import com.bookkeeping.application.dto.VehicleCreateOrUpdateDTO;
 import com.bookkeeping.containers.PostgresTestResource;
+import com.bookkeeping.domain.enums.VehicleStatus;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -31,7 +32,7 @@ class VehicleResourceTest {
                 "Preto",
                 "1.0 Turbo",
                 "Gasolina",
-                "DISPONIVEL"
+                VehicleStatus.AVAILABLE
         );
     }
 
@@ -96,7 +97,7 @@ class VehicleResourceTest {
                 "Branco",
                 "1.2 Turbo",
                 "Flex",
-                "ATIVO"
+                VehicleStatus.AVAILABLE
         );
 
         given()

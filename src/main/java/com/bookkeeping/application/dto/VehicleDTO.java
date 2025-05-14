@@ -1,5 +1,7 @@
 package com.bookkeeping.application.dto;
 
+import com.bookkeeping.domain.enums.VehicleStatus;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -20,5 +22,5 @@ public record VehicleDTO(
     String color,
     String engine,
     String fuelType,
-    String status
+    VehicleStatus status
 ) { }
