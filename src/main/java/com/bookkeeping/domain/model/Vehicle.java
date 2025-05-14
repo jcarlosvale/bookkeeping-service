@@ -23,7 +23,7 @@ public class Vehicle {
     @Column(length = 100)
     private String manufacturer;
 
-    @Column(length = 100, unique = true)
+    @Column(length = 100)
     private String chassis;
 
     @Column(name = "vehicle_year")

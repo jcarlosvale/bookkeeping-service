@@ -5,7 +5,7 @@ CREATE TABLE vehicle (
                          license_plate VARCHAR(20),
                          model VARCHAR(100) NOT NULL,
                          manufacturer VARCHAR(100),
-                         chassis VARCHAR(100) UNIQUE,
+                         chassis VARCHAR(100),
                          vehicle_year INT,
                          purchase_date DATE NOT NULL,
                          purchase_value DECIMAL(15,2) NOT NULL,

@@ -13,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -32,6 +33,7 @@ public class VehicleService {
 
     @WithSession
     public Uni<VehicleDTO> findById(final UUID id) {
+        Objects.requireNonNull(id);
         return vehicleRepository.findById(id)
                 .onItem().ifNull().failWith(() -> new NotFoundException("Vehicle not found: " + id))
                 .map(vehicleMapper::toDTO);
@@ -51,6 +53,8 @@ public class VehicleService {
 
     @WithTransaction
     public Uni<VehicleDTO> create(final VehicleCreateOrUpdateDTO dto, final String userId) {
+        Objects.requireNonNull(dto);
+        Objects.requireNonNull(userId);
         return auditSessionContext.setUserId(userId)
                 .chain(() -> {
                     final Vehicle entity = vehicleMapper.toEntity(dto);
@@ -61,6 +65,9 @@ public class VehicleService {
 
     @WithTransaction
     public Uni<VehicleDTO> update(final UUID id, final VehicleCreateOrUpdateDTO dto, final String userId) {
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(dto);
+        Objects.requireNonNull(userId);
         return auditSessionContext.setUserId(userId)
                 .chain(() ->
                         vehicleRepository.findById(id)
@@ -88,6 +95,8 @@ public class VehicleService {
 
     @WithTransaction
     public Uni<Void> delete(final UUID id, final String userId) {
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(userId);
         return auditSessionContext.setUserId(userId)
                 .chain(() -> vehicleRepository.deleteById(id));
     }
