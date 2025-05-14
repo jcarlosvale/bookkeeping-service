@@ -1,5 +1,6 @@
 package com.bookkeeping.domain.model;
 
+import com.bookkeeping.domain.enums.VehicleStatus;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -57,7 +58,8 @@ public class Vehicle {
     private String fuelType;
 
     @Column(length = 50)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private VehicleStatus status;
 
     // === Getters ===
 
@@ -121,7 +123,7 @@ public class Vehicle {
         return fuelType;
     }
 
-    public String getStatus() {
+    public VehicleStatus getStatus() {
         return status;
     }
 
@@ -186,7 +188,7 @@ public class Vehicle {
         this.fuelType = fuelType;
     }
 
-    public void setStatus(final String status) {
+    public void setStatus(final VehicleStatus status) {
         this.status = status;
     }
 }

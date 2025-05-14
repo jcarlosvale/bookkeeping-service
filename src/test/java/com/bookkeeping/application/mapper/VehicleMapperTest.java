@@ -2,6 +2,7 @@ package com.bookkeeping.application.mapper;
 
 import com.bookkeeping.application.dto.VehicleCreateOrUpdateDTO;
 import com.bookkeeping.application.dto.VehicleDTO;
+import com.bookkeeping.domain.enums.VehicleStatus;
 import com.bookkeeping.domain.model.Vehicle;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,7 @@ class VehicleMapperTest {
         vehicle.setColor("Prata");
         vehicle.setEngine("1.0 Turbo");
         vehicle.setFuelType("Gasolina");
-        vehicle.setStatus("DISPONIVEL");
+        vehicle.setStatus(VehicleStatus.AVAILABLE);
 
         VehicleDTO dto = mapper.toDTO(vehicle);
 
