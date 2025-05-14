@@ -35,20 +35,23 @@ public class VehicleResource {
     }
 
     @POST
-    public Uni<VehicleDTO> create(@Valid final VehicleCreateOrUpdateDTO dto) {
-        return vehicleService.create(dto);
+    public Uni<VehicleDTO> create(@Valid final VehicleCreateOrUpdateDTO dto,
+                                  @HeaderParam("X-User-Id") final String userId) {
+        return vehicleService.create(dto, userId != null ? userId : UUID.randomUUID().toString());
     }
 
     @PUT
     @Path("/{id}")
     public Uni<VehicleDTO> update(@PathParam("id") final UUID id,
-                                  @Valid final VehicleCreateOrUpdateDTO dto) {
-        return vehicleService.update(id, dto);
+                                  @Valid final VehicleCreateOrUpdateDTO dto,
+                                  @HeaderParam("X-User-Id") final String userId) {
+        return vehicleService.update(id, dto, userId != null ? userId : UUID.randomUUID().toString());
     }
 
     @DELETE
     @Path("/{id}")
-    public Uni<Void> delete(@PathParam("id") final UUID id) {
-        return vehicleService.delete(id);
+    public Uni<Void> delete(@PathParam("id") final UUID id,
+                            @HeaderParam("X-User-Id") final String userId) {
+        return vehicleService.delete(id, userId != null ? userId : UUID.randomUUID().toString());
     }
 }
