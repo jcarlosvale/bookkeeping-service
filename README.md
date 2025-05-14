@@ -6,6 +6,11 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 
 ## Running the application in dev mode
 
+First run the docker compose using:
+```shell script
+docker-compose up -d
+```
+
 You can run your application in dev mode that enables live coding using:
 
 ```shell script
@@ -34,6 +39,12 @@ If you want to build an _über-jar_, execute the following command:
 ```
 
 The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+
+## Swagger
+
+```shell script
+http://localhost:8080/q/swagger-ui
+```
 
 ## Creating a native executable
 
