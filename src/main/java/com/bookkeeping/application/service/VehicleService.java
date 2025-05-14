@@ -5,6 +5,7 @@ import com.bookkeeping.application.dto.VehicleCreateOrUpdateDTO;
 import com.bookkeeping.application.mapper.VehicleMapper;
 import com.bookkeeping.domain.model.Vehicle;
 import com.bookkeeping.domain.repository.VehicleRepository;
+import com.bookkeeping.infrastructure.audit.AuditSessionContext;
 import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
@@ -19,10 +20,14 @@ public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
     private final VehicleMapper vehicleMapper;
+    private final AuditSessionContext auditSessionContext;
 
-    public VehicleService(final VehicleRepository vehicleRepository, final VehicleMapper vehicleMapper) {
+    public VehicleService(final VehicleRepository vehicleRepository,
+                          final VehicleMapper vehicleMapper,
+                          final AuditSessionContext auditSessionContext) {
         this.vehicleRepository = vehicleRepository;
         this.vehicleMapper = vehicleMapper;
+        this.auditSessionContext = auditSessionContext;
     }
 
     @WithSession
@@ -44,14 +49,17 @@ public class VehicleService {
                 .onItem().transform(list -> list.stream().map(vehicleMapper::toDTO).toList());
     }
 
-    @WithTransaction
-    public Uni<VehicleDTO> create(final VehicleCreateOrUpdateDTO dto) {
-        final Vehicle entity = vehicleMapper.toEntity(dto);
-        return vehicleRepository.save(entity)
-                .map(vehicleMapper::toDTO);
+    @WithSession
+    public Uni<VehicleDTO> create(final VehicleCreateOrUpdateDTO dto, final String userId) {
+        return auditSessionContext.setUserId(userId)
+                .chain(() -> {
+                    final Vehicle entity = vehicleMapper.toEntity(dto);
+                    return vehicleRepository.save(entity)
+                            .map(vehicleMapper::toDTO);
+                });
     }
 
-    @WithTransaction
+    @WithSession
     public Uni<VehicleDTO> update(final UUID id, final VehicleCreateOrUpdateDTO dto) {
         return vehicleRepository.findById(id)
                 .onItem().ifNull().failWith(() -> new NotFoundException("Vehicle not found: " + id))
@@ -75,7 +83,7 @@ public class VehicleService {
                 .map(vehicleMapper::toDTO);
     }
 
-    @WithTransaction
+    @WithSession
     public Uni<Void> delete(final UUID id) {
         return vehicleRepository.deleteById(id);
     }
