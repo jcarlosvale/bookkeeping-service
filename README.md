@@ -44,6 +44,8 @@ The application, packaged as an _über-jar_, is now runnable using `java -jar ta
 
 ```shell script
 http://localhost:8080/q/swagger-ui
+
+http://localhost:8080/q/openapi?format=yaml
 ```
 
 ## Creating a native executable

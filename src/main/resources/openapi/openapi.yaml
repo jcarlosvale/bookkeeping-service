@@ -52,7 +52,7 @@ components:
         fuelType:
           type: string
         status:
-          type: string
+          $ref: "#/components/schemas/VehicleStatus"
     VehicleDTO:
       type: object
       properties:
@@ -88,7 +88,23 @@ components:
         fuelType:
           type: string
         status:
-          type: string
+          $ref: "#/components/schemas/VehicleStatus"
+    VehicleStatus:
+      type: string
+      enum:
+      - IN_STOCK
+      - FOR_SALE
+      - SOLD
+      - IN_MAINTENANCE
+      - RESERVED
+      - TEST_DRIVE
+      - RETIRED
+      - DELIVERED
+      - AVAILABLE
+      - PENDING_DOCUMENTS
+      - IN_TRANSFER
+      - DAMAGED
+      - IN_REPAIR
 paths:
   /api/v1/vehicles:
     get:
@@ -116,6 +132,11 @@ paths:
       tags:
       - Vehicle Resource
     post:
+      parameters:
+      - name: X-User-Id
+        in: header
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -142,6 +163,10 @@ paths:
         required: true
         schema:
           $ref: "#/components/schemas/UUID"
+      - name: X-User-Id
+        in: header
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -184,6 +209,10 @@ paths:
         required: true
         schema:
           $ref: "#/components/schemas/UUID"
+      - name: X-User-Id
+        in: header
+        schema:
+          type: string
       responses:
         "204":
           description: No Content
