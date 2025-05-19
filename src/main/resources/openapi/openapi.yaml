@@ -2,6 +2,26 @@
 openapi: 3.1.0
 components:
   schemas:
+    AccountingEntryLabelCreateOrUpdateDTO:
+      type: object
+      required:
+      - code
+      properties:
+        code:
+          type: string
+          maxLength: 50
+          pattern: \S
+        description:
+          type: string
+    AccountingEntryLabelDTO:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        code:
+          type: string
+        description:
+          type: string
     LocalDate:
       type: string
       format: date
@@ -106,6 +126,119 @@ components:
       - DAMAGED
       - IN_REPAIR
 paths:
+  /api/v1/accounting-entry-labels:
+    get:
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: size
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AccountingEntryLabelDTO"
+      summary: Get All
+      tags:
+      - Accounting Entry Label Resource
+    post:
+      parameters:
+      - name: X-User-Id
+        in: header
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountingEntryLabelCreateOrUpdateDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountingEntryLabelDTO"
+        "400":
+          description: Bad Request
+      summary: Create
+      tags:
+      - Accounting Entry Label Resource
+  /api/v1/accounting-entry-labels/{id}:
+    put:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      - name: X-User-Id
+        in: header
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountingEntryLabelCreateOrUpdateDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountingEntryLabelDTO"
+        "400":
+          description: Bad Request
+      summary: Update
+      tags:
+      - Accounting Entry Label Resource
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountingEntryLabelDTO"
+      summary: Get By Id
+      tags:
+      - Accounting Entry Label Resource
+    delete:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      - name: X-User-Id
+        in: header
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+      summary: Delete
+      tags:
+      - Accounting Entry Label Resource
   /api/v1/vehicles:
     get:
       parameters:
